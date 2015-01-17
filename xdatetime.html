@@ -1,13 +1,15 @@
 <template name="xdatetime">
-    <div class="xwidget xdatetime ui icon input" formid="{{this.formid}}" name="{{this.name}}" time="{{this.time}}" format="{{this.format}}">
+    <div class="xwidget xdatetime" formid="{{this.formid}}" name="{{this.name}}" time="{{this.time}}" format="{{this.format}}">
         {{init ..}}
-        <input type='text' class="xdatetime-input" value="{{value}}"><i class="calendar icon show-calendar"></i>
+        <div class="ui icon input">
+            <input type='text' class="xdatetime-input" value="{{value}}"><i class="calendar icon show-calendar"></i>
+        </div>
         {{#if show_calendar}}
-            <div class=xdatetime-popover>
+            <div class="xdatetime-popover">
                 {{#each week}}
                 <div>
                     {{#each day this}}
-                    <span class="xdatetime-day {{current_month_bold}}" date={{this.date}}>{{this.value}}</span>
+                    <span class="xdatetime-day {{day_class}}" date={{this.date}}>{{this.value}}</span>
                     {{/each}}
                 </div>
                 {{/each}}

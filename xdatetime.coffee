@@ -1,7 +1,7 @@
 current_input = null
 show_calendar = new ReactiveVar(false)
 xday = new ReactiveVar(moment.utc())
-data = new Meteor.Collection null
+@data = data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
 
@@ -9,6 +9,12 @@ Template.xdatetime.events
   'click .show-calendar': (e, t)->
     current_input = path(this.formid, this.name)
     show_calendar.set(not show_calendar.get())
+
+  'click .xdatetime-day': (e, t)->
+    path_ = path(t.data.formid, t.data.name)
+    data.update({path: path_}, {$set: {value: moment(this.date)}})
+    show_calendar.set(false)
+
 
 Template.xdatetime.helpers
   init: (obj)->
@@ -35,9 +41,10 @@ Template.xdatetime.helpers
 
     while not ini.isSame(end)
       if ini_month.format('MM') == ini.format('MM')
-        current_month_bold = 'bold'
+        day_class = 'bold'
       else
-        current_month_bold = ''
-      ret.push {value: ini.format('DD'), date: ini, current_month_bold: current_month_bold}
+        day_class = ''
+      #path_ = path(parent_context.formid, parent_context.name)
+      ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), day_class: day_class}
       ini.add('days', 1)
     ret[week*7...week*7+7]

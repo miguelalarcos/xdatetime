@@ -16,5 +16,5 @@ Package.onUse(function(api) {
   api.use('momentjs:moment', 'client');
   api.addFiles('xdatetime.html', 'client');
   api.addFiles('xdatetime.coffee', 'client');
-
+  api.addFiles('xdatetime.css', 'client');
 });
