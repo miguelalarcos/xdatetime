@@ -1,0 +1,11 @@
+<body>
+    {{>xdatetime_view}}
+</body>
+
+<template name="xdatetime_view">
+  {{#with data}}
+    {{> xdatetime formid='1' name='datetime1' time='true' format='DD-MM-YYYY'}}
+    <br>
+    {{> xdatetime formid='1' name='datetime2' time='true' format='DD-MM-YYYY'}}
+  {{/with}}
+</template>

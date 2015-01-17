@@ -8,5 +8,13 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.0.2.1');
   api.use('coffeescript', 'client');
-  api.addFiles('miguelalarcos:xdatetime.coffee', 'client');
+  api.use('underscore', 'client');
+  api.use('jquery', 'client');
+  api.use('session', 'client');
+  api.use('templating', 'client');
+  api.use('reactive-var', 'client');
+  api.use('momentjs:moment', 'client');
+  api.addFiles('xdatetime.html', 'client');
+  api.addFiles('xdatetime.coffee', 'client');
+
 });
