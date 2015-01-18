@@ -1,2 +1,2 @@
 Template.xdatetime_view.helpers
-  data: -> {datetime1: moment(), datetime2: moment()}
+  data: -> {datetime1: moment.utc(), datetime2: moment.utc()}

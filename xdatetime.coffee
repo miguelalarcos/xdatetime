@@ -1,6 +1,6 @@
 current_input = null
 show_calendar = new ReactiveVar(false)
-xday = new ReactiveVar(moment())
+xday = new ReactiveVar(moment.utc())
 data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
@@ -18,16 +18,31 @@ Template.xdatetime.events
       date = this.date + ' ' + value
     else
       date = this.date
-    data.update({path: path_}, {$set: {value: moment(date)}})
+    data.update({path: path_}, {$set: {value: moment(date, 'YYYY-MM-DD HH:mm').utc()}})
     show_calendar.set(false)
-    xday.set(moment())
-  'focusout .xdatetime-year, .set-year': (e,t)->
+    xday.set(moment.utc())
+  'focusout .xdatetime-year': (e,t)->
     year = $(e.target).val()
     xday.set(xday.get().year(year))
   'click .minus-month': (e,t)->
     xday.set(xday.get().subtract(1, 'months'))
   'click .plus-month': (e,t)->
     xday.set(xday.get().add(1, 'months'))
+  'click .minus-year': (e,t)->
+    xday.set(xday.get().subtract(1, 'years'))
+  'click .plus-year': (e,t)->
+    xday.set(xday.get().add(1, 'years'))
+
+  'click .minus-hour': (e,t)->
+    xday.set(xday.get().subtract(1, 'hours'))
+  'click .plus-hour': (e,t)->
+    xday.set(xday.get().add(1, 'hours'))
+
+  'click .minus-minute': (e,t)->
+    xday.set(xday.get().subtract(1, 'minutes'))
+  'click .plus-minute': (e,t)->
+    xday.set(xday.get().add(1, 'minutes'))
+
 
 
 Template.xdatetime.helpers
@@ -41,13 +56,13 @@ Template.xdatetime.helpers
   value: ->
     atts = this.atts or this
     item = data.findOne(path: path(atts.formid, atts.name))
-    if item then item.value.format(atts.format) else null
+    if item then item.value.local().format(atts.format) else null
 
   show_calendar: -> show_calendar.get() and current_input == path(this.formid, this.name)
   show_time: ->
     atts = this.atts or this
     atts.time == 'true'
-  time: -> moment().format('hh:mm')
+  time: -> xday.get().local().format('HH:mm')
   year: -> xday.get().format('YYYY')
   month: -> xday.get().format('MM')
   week: -> (i for i in [0...6])
@@ -75,22 +90,12 @@ $.valHooks['xdatetime'] =
     if not value
       return null
     format = $(el).attr('format')
-    moment(value, format)
+    moment.utc(moment(value, format))
 
   set: (el, value)->
     formid = $(el).attr('formid')
     name = $(el).attr('name')
     path_ = path(formid, name)
-    #if _.isEqual(value, [""]) or value == '' # don't know why happens
-    #  xdata.update({name: name}, {$set:{value: ''}})
-    #  return
-    if _.isString(value)
-      value = moment.utc(value, "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]").local()
-    else if _.isDate(value)
-      value = moment(value)
-    else
-      value = value.local()
-
     data.remove({path: path_})
     data.insert({path: path_, value:value})
 

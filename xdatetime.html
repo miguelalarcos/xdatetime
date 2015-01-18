@@ -6,25 +6,36 @@
         </div>
         {{#if show_calendar}}
             <div class="xdatetime-popover">
-                <div class="">
+                <div>
                     <i class="minus icon minus-month"></i>
                     {{month}}
                     <i class="plus icon plus-month"></i>
-                    <span class="ui icon input">
-                        <input type="text" class="xdatetime-year" value="{{year}}">
-                        <i class="checkmark icon set-year"></i>
+                    <span class="ui input form">
+                        <span class="inline field">
+                            <i class="minus icon minus-year"></i>
+                            <input type="text" class="xdatetime-year" value="{{year}}" size="4">
+                            <i class="checkmark icon set-year"></i>
+                            <i class="plus icon plus-year"></i>
+                        </span>
                     </span>
                 </div>
                 {{#each week}}
                 <div>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     {{#each day this}}
-                    <span class="xdatetime-day {{day_class}}" date={{this.date}}>{{this.value}}</span>
+                    <span class="xdatetime-day {{day_class}}" date={{this.date}}>{{this.value}}&nbsp;&nbsp;</span>
                     {{/each}}
                 </div>
                 {{/each}}
             {{#if show_time}}
-                <div class="ui input">
-                    <input type="text" class="xdatetime-time" value="{{time}}">
+                <div class="ui input form">
+                    <span class="inline field">
+                        <i class="minus icon minus-hour"></i>
+                        <i class="plus icon plus-hour"></i>
+                        <input type="text" class="xdatetime-time" value="{{time}}" size="5">
+                        <i class="minus icon minus-minute"></i>
+                        <i class="plus icon plus-minute"></i>
+                    </span>
                 </div>
             {{/if}}
             </div>
