@@ -1,7 +1,9 @@
+@_testing_xdatetime = {}
 current_input = null
 show_calendar = new ReactiveVar(false)
 xday = new ReactiveVar(moment.utc())
-data = new Meteor.Collection null
+@_testing_xdatetime.xday = xday
+@data = data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
 
@@ -43,7 +45,25 @@ Template.xdatetime.events
   'click .plus-minute': (e,t)->
     xday.set(xday.get().add(1, 'minutes'))
 
+dayRow = (week)->
+  ret = []
+  day=xday.get()
+  ini_month = day.clone().startOf('Month')
+  ini = day.clone().startOf('Month').add('days', 1-ini_month.isoWeekday())
+  end_month = day.clone().endOf('Month').startOf('Day')
+  end = day.clone().endOf('Month').add('days', 8-end_month.isoWeekday()).startOf('Day')
 
+  while not ini.isSame(end)
+    if ini_month.format('MM') == ini.format('MM')
+      day_class = 'xbold'
+    else
+      day_class = 'xcursive'
+
+    ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), day_class: day_class}
+    ini.add('days', 1)
+  ret[week*7...week*7+7]
+
+@_testing_xdatetime.dayRow = dayRow
 
 Template.xdatetime.helpers
   init: (obj)->
@@ -51,6 +71,7 @@ Template.xdatetime.helpers
     path_ = path(atts.formid, atts.name)
     data.remove(path: path_)
     value = this.value or obj[atts.name]
+    if value is undefined then value = moment.utc().seconds(0).milliseconds(0) else value = value.seconds(0).milliseconds(0)
     data.insert({path:path_, value:value})
     null
   value: ->
@@ -66,23 +87,8 @@ Template.xdatetime.helpers
   year: -> xday.get().format('YYYY')
   month: -> xday.get().format('MM')
   week: -> (i for i in [0...6])
-  day: (week) ->
-    ret = []
-    day=xday.get()
-    ini_month = day.clone().startOf('Month')
-    ini = day.clone().startOf('Month').add('days', 1-ini_month.isoWeekday())
-    end_month = day.clone().endOf('Month').startOf('Day')
-    end = day.clone().endOf('Month').add('days', 8-end_month.isoWeekday()).startOf('Day')
+  day: (week) -> dayRow(week)
 
-    while not ini.isSame(end)
-      if ini_month.format('MM') == ini.format('MM')
-        day_class = 'xbold'
-      else
-        day_class = 'xcursive'
-
-      ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), day_class: day_class}
-      ini.add('days', 1)
-    ret[week*7...week*7+7]
 
 $.valHooks['xdatetime'] =
   get: (el)->
@@ -97,8 +103,8 @@ $.valHooks['xdatetime'] =
     name = $(el).attr('name')
     path_ = path(formid, name)
     data.remove({path: path_})
+    value = value.seconds(0).milliseconds(0)
     data.insert({path: path_, value:value})
-
 
 $.fn.xdatetime = (name)->
   this.each ->

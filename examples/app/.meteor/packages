@@ -11,3 +11,5 @@ coffeescript
 miguelalarcos:xdatetime
 nooitaf:semantic-ui
 momentjs:moment
+sanjo:jasmine
+velocity:html-reporter
