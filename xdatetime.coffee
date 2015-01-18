@@ -11,8 +11,8 @@ Template.xdatetime.events
     show_calendar.set(not show_calendar.get())
 
   'click .xdatetime-day': (e, t)->
-    path_ = path(t.data.formid, t.data.name)
     atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
     if atts.time == 'true'
       value = $(t.find('.xdatetime-time')).val()
       date = this.date + ' ' + value
