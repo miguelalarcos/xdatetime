@@ -1,7 +1,7 @@
 current_input = null
 show_calendar = new ReactiveVar(false)
 xday = new ReactiveVar(moment())
-@data = data = new Meteor.Collection null
+data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
 
@@ -55,10 +55,8 @@ Template.xdatetime.helpers
     ret = []
     day=xday.get()
     ini_month = day.clone().startOf('Month')
-    #ini = day.clone().startOf('Month').add('days', -ini_month.day())
     ini = day.clone().startOf('Month').add('days', 1-ini_month.isoWeekday())
     end_month = day.clone().endOf('Month').startOf('Day')
-    #end = day.clone().endOf('Month').add('days', 7-end_month.day()).startOf('Day')
     end = day.clone().endOf('Month').add('days', 8-end_month.isoWeekday()).startOf('Day')
 
     while not ini.isSame(end)
@@ -70,3 +68,37 @@ Template.xdatetime.helpers
       ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), day_class: day_class}
       ini.add('days', 1)
     ret[week*7...week*7+7]
+
+$.valHooks['xdatetime'] =
+  get: (el)->
+    value = $(el).find('.xdatetime-input').val()
+    if not value
+      return null
+    format = $(el).attr('format')
+    moment(value, format)
+
+  set: (el, value)->
+    formid = $(el).attr('formid')
+    name = $(el).attr('name')
+    path_ = path(formid, name)
+    #if _.isEqual(value, [""]) or value == '' # don't know why happens
+    #  xdata.update({name: name}, {$set:{value: ''}})
+    #  return
+    if _.isString(value)
+      value = moment.utc(value, "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]").local()
+    else if _.isDate(value)
+      value = moment(value)
+    else
+      value = value.local()
+
+    data.remove({path: path_})
+    data.insert({path: path_, value:value})
+
+
+$.fn.xdatetime = (name)->
+  this.each ->
+    this.type = 'xdatetime'
+  this
+
+Template.xdatetime.rendered = ->
+  $(this.find('.xwidget')).xdatetime()
