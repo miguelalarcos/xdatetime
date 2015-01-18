@@ -1,6 +1,6 @@
 current_input = null
 show_calendar = new ReactiveVar(false)
-xday = new ReactiveVar(moment.utc())
+xday = new ReactiveVar(moment())
 @data = data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
@@ -12,8 +12,22 @@ Template.xdatetime.events
 
   'click .xdatetime-day': (e, t)->
     path_ = path(t.data.formid, t.data.name)
-    data.update({path: path_}, {$set: {value: moment(this.date)}})
+    atts = t.data.atts or t.data
+    if atts.time == 'true'
+      value = $(t.find('.xdatetime-time')).val()
+      date = this.date + ' ' + value
+    else
+      date = this.date
+    data.update({path: path_}, {$set: {value: moment(date)}})
     show_calendar.set(false)
+    xday.set(moment())
+  'focusout .xdatetime-year, .set-year': (e,t)->
+    year = $(e.target).val()
+    xday.set(xday.get().year(year))
+  'click .minus-month': (e,t)->
+    xday.set(xday.get().subtract(1, 'months'))
+  'click .plus-month': (e,t)->
+    xday.set(xday.get().add(1, 'months'))
 
 
 Template.xdatetime.helpers
@@ -30,21 +44,29 @@ Template.xdatetime.helpers
     if item then item.value.format(atts.format) else null
 
   show_calendar: -> show_calendar.get() and current_input == path(this.formid, this.name)
+  show_time: ->
+    atts = this.atts or this
+    atts.time == 'true'
+  time: -> moment().format('hh:mm')
+  year: -> xday.get().format('YYYY')
+  month: -> xday.get().format('MM')
   week: -> (i for i in [0...6])
   day: (week) ->
     ret = []
     day=xday.get()
     ini_month = day.clone().startOf('Month')
-    ini = day.clone().startOf('Month').add('days', -ini_month.day())
+    #ini = day.clone().startOf('Month').add('days', -ini_month.day())
+    ini = day.clone().startOf('Month').add('days', 1-ini_month.isoWeekday())
     end_month = day.clone().endOf('Month').startOf('Day')
-    end = day.clone().endOf('Month').add('days', 7-end_month.day()).startOf('Day')
+    #end = day.clone().endOf('Month').add('days', 7-end_month.day()).startOf('Day')
+    end = day.clone().endOf('Month').add('days', 8-end_month.isoWeekday()).startOf('Day')
 
     while not ini.isSame(end)
       if ini_month.format('MM') == ini.format('MM')
-        day_class = 'bold'
+        day_class = 'xbold'
       else
-        day_class = ''
-      #path_ = path(parent_context.formid, parent_context.name)
+        day_class = 'xcursive'
+
       ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), day_class: day_class}
       ini.add('days', 1)
     ret[week*7...week*7+7]

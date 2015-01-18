@@ -1,6 +1,9 @@
-.bold {
+.xbold {
     font-weight: bold;
+}
 
+.xcursive{
+    font-style: italic;
 }
 
 .xdatetime-popover {
@@ -12,3 +15,4 @@
 .xdatetime-popover{
     background-color: white;
 }
+

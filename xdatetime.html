@@ -6,6 +6,15 @@
         </div>
         {{#if show_calendar}}
             <div class="xdatetime-popover">
+                <div class="">
+                    <i class="minus icon minus-month"></i>
+                    {{month}}
+                    <i class="plus icon plus-month"></i>
+                    <span class="ui icon input">
+                        <input type="text" class="xdatetime-year" value="{{year}}">
+                        <i class="checkmark icon set-year"></i>
+                    </span>
+                </div>
                 {{#each week}}
                 <div>
                     {{#each day this}}
@@ -13,6 +22,11 @@
                     {{/each}}
                 </div>
                 {{/each}}
+            {{#if show_time}}
+                <div class="ui input">
+                    <input type="text" class="xdatetime-time" value="{{time}}">
+                </div>
+            {{/if}}
             </div>
         {{/if}}
     </div>
