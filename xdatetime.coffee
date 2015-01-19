@@ -26,6 +26,13 @@ Template.xdatetime.events
   'focusout .xdatetime-year': (e,t)->
     year = $(e.target).val()
     xday.set(xday.get().year(year))
+  'click .set-hour': (e,t)->
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    time = $(t.find('.xdatetime-time')).val()
+    date = data.findOne(path:path_).value.format('YYYY-MM-DD')
+    datetime = date + ' ' + time
+    data.update({path: path_}, {$set: {value: moment(datetime, 'YYYY-MM-DD HH:mm').utc()}})
   'click .minus-month': (e,t)->
     xday.set(xday.get().subtract(1, 'months'))
   'click .plus-month': (e,t)->

@@ -15,7 +15,18 @@ describe 'test dayRow',->
     list = (x.value for x in dayRow(5))
     expect(list).toEqual([])
 
-describe 'test set get', ->
+describe 'test init', ->
+  it 'test', ->
+    m=moment('2015-01-01')
+    spyOn(moment, 'utc').and.returnValue(m)
+    el = Blaze.renderWithData(Template.testing, {}, $('body')[0])
+    Meteor.flush()
+    back=$('[formid=0].xwidget').val()
+    bool = back.isSame(m)
+    expect(bool).toBe(true)
+    Blaze.remove(el)
+
+describe 'test...', ->
   el= null
   beforeEach ->
     el = Blaze.renderWithData(Template.testing, {}, $('body')[0])
@@ -23,9 +34,10 @@ describe 'test set get', ->
   afterEach ->
     Blaze.remove(el)
 
-  it 'test', ->
+  it 'test set get', ->
     m = moment.utc()
     $('[formid=0].xwidget').val(m)
     back = $('[formid=0].xwidget').val()
     bool = m.isSame(back)
     expect(bool).toBe(true)
+
