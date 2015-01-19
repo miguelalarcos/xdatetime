@@ -9,9 +9,10 @@ path = (formid, name)-> formid + ':' + name
 
 Template.xdatetime.events
   'click .show-calendar': (e, t)->
-    current_input = path(this.formid, this.name)
+    atts = t.data.atts or t.data
+    xday.set(moment.utc())
+    current_input = path(atts.formid, atts.name)
     show_calendar.set(not show_calendar.get())
-
   'click .xdatetime-day': (e, t)->
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
@@ -62,7 +63,10 @@ dayRow = (week)->
 
   while not ini.isSame(end)
     if ini_month.format('MM') == ini.format('MM')
-      day_class = 'xbold'
+      if ini.clone().startOf('day').isSame(moment.utc().startOf('day'))
+        day_class = 'xbold xunderline xtoday'
+      else
+        day_class = 'xbold'
     else
       day_class = 'xcursive'
 
@@ -89,7 +93,10 @@ Template.xdatetime.helpers
     item = data.findOne(path: path(atts.formid, atts.name))
     if item then item.value.local().format(atts.format) else null
 
-  show_calendar: -> show_calendar.get() and current_input == path(this.formid, this.name)
+  show_calendar: ->
+    atts = this.atts or this
+    show_calendar.get() and current_input == path(atts.formid, atts.name)
+
   show_time: ->
     atts = this.atts or this
     atts.time == 'true'
