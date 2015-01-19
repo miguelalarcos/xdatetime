@@ -1,6 +1,5 @@
 dayRow = @_testing_xdatetime.dayRow
 xday = @_testing_xdatetime.xday
-data = @data
 
 describe 'test dayRow',->
   beforeEach ->
@@ -35,11 +34,11 @@ describe 'test...', ->
     Blaze.remove(el)
 
   it 'test set get', ->
-    m = moment.utc().seconds(0).milliseconds(0).toDate()
+    m = moment.utc()
     $('[formid=0].xwidget').val(m)
     Meteor.flush()
     back = moment($('[formid=0].xwidget').val())
-    bool = moment(m).isSame(back)
+    bool = moment(m).startOf('minute').isSame(back)
     expect(bool).toBe(true)
 
   it 'test init get', ->
@@ -55,5 +54,28 @@ describe 'test...', ->
     back = moment.utc($('[formid=0].xwidget').val()).startOf('day')
     today = moment.utc().startOf('day')
     expect(back.isSame(today)).toBe(true)
+
+  it 'test minus 1 minute', ->
+    dt = xday.get()
+    $('[formid=0] .show-calendar').trigger('click')
+    Meteor.flush()
+    $('[formid=0] .minus-minute').trigger('click')
+    dt2 = xday.get() # ojo en algun momento xday deja de estar en utc. Invesigarlo
+    expect(dt.diff(dt2, 'minutes')).toBe(1)
+    $('[formid=0] .show-calendar').trigger('click')
+    Meteor.flush()
+
+  it 'test change year', ->
+    dt = xday.get()
+    $('[formid=0] .show-calendar').trigger('click')
+    Meteor.flush()
+    current_year = parseInt($('[formid=0] .xdatetime-year').val())
+    $('[formid=0] .xdatetime-year').val(current_year+1)
+    $('[formid=0] .set-year').trigger('click')
+
+    dt2 = xday.get()
+    expect(dt2.diff(dt, 'years')).toBe(1)
+    $('[formid=0] .show-calendar').trigger('click')
+    Meteor.flush()
 
 

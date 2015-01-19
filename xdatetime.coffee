@@ -1,16 +1,16 @@
 @_testing_xdatetime = {}
 current_input = null
 show_calendar = new ReactiveVar(false)
-xday = new ReactiveVar(moment.utc())
+xday = new ReactiveVar(moment.utc().startOf('minute'))
 @_testing_xdatetime.xday = xday
-@data = data = new Meteor.Collection null
+data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
 
 Template.xdatetime.events
   'click .show-calendar': (e, t)->
     atts = t.data.atts or t.data
-    xday.set(moment.utc())
+    xday.set(moment.utc().startOf('minute'))
     current_input = path(atts.formid, atts.name)
     show_calendar.set(not show_calendar.get())
   'click .xdatetime-day': (e, t)->
@@ -23,9 +23,10 @@ Template.xdatetime.events
       date = this.date
     data.update({path: path_}, {$set: {value: moment(date, 'YYYY-MM-DD HH:mm').utc()}})
     show_calendar.set(false)
-    xday.set(moment.utc())
-  'focusout .xdatetime-year': (e,t)->
-    year = $(e.target).val()
+    xday.set(moment.utc().startOf('minute'))
+  #'focusout .xdatetime-year': (e,t)->
+  'click .set-year': (e,t) ->
+    year = $(t.find('.xdatetime-year')).val()
     xday.set(xday.get().year(year))
   'click .set-hour': (e,t)->
     atts = t.data.atts or t.data
@@ -120,7 +121,7 @@ $.valHooks['xdatetime'] =
     name = $(el).attr('name')
     path_ = path(formid, name)
     data.remove({path: path_})
-    value = moment(value).seconds(0).milliseconds(0)
+    value = moment(value).startOf('minute') #seconds(0).milliseconds(0)
     data.insert({path: path_, value:value})
 
 $.fn.xdatetime = (name)->
