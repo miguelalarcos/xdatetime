@@ -1,6 +1,7 @@
 @_testing_xdatetime = {}
 current_input = null
 show_calendar = new ReactiveVar(false)
+@_testing_xdatetime.show_calendar = show_calendar
 xday = new ReactiveVar(moment.utc().startOf('minute'))
 @_testing_xdatetime.xday = xday
 data = new Meteor.Collection null
@@ -28,11 +29,12 @@ Template.xdatetime.events
   'click .set-year': (e,t) ->
     year = $(t.find('.xdatetime-year')).val()
     xday.set(xday.get().year(year))
-  'click .set-hour': (e,t)->
+  'click .set-time': (e,t)->
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
     time = $(t.find('.xdatetime-time')).val()
-    date = data.findOne(path:path_).value.format('YYYY-MM-DD')
+    date = moment($(t.find('.xdatetime-input')).val(), atts.format)
+    date = date.format('YYYY-MM-DD')
     datetime = date + ' ' + time
     data.update({path: path_}, {$set: {value: moment(datetime, 'YYYY-MM-DD HH:mm').utc()}})
   'click .minus-month': (e,t)->
@@ -92,7 +94,10 @@ Template.xdatetime.helpers
   value: ->
     atts = this.atts or this
     item = data.findOne(path: path(atts.formid, atts.name))
-    if item then item.value.local().format(atts.format) else null
+    if item
+      item.value.local().format(atts.format)
+    else
+      null
 
   show_calendar: ->
     atts = this.atts or this
