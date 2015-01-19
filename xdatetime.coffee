@@ -25,7 +25,6 @@ Template.xdatetime.events
     data.update({path: path_}, {$set: {value: moment(date, 'YYYY-MM-DD HH:mm').utc()}})
     show_calendar.set(false)
     xday.set(moment.utc().startOf('minute'))
-  #'focusout .xdatetime-year': (e,t)->
   'click .set-year': (e,t) ->
     year = $(t.find('.xdatetime-year')).val()
     xday.set(xday.get().year(year))
@@ -58,7 +57,7 @@ Template.xdatetime.events
 
 dayRow = (week)->
   ret = []
-  day=xday.get()
+  day=xday.get().local()
   ini_month = day.clone().startOf('Month')
   ini = day.clone().startOf('Month').add(1-ini_month.isoWeekday(), 'days')
   end_month = day.clone().endOf('Month').startOf('Day')
@@ -66,7 +65,7 @@ dayRow = (week)->
 
   while not ini.isSame(end)
     if ini_month.format('MM') == ini.format('MM')
-      if ini.clone().startOf('day').isSame(moment.utc().startOf('day'))
+      if ini.clone().startOf('day').isSame(moment().startOf('day'))
         day_class = 'xbold xunderline xtoday'
       else
         day_class = 'xbold'
@@ -107,8 +106,8 @@ Template.xdatetime.helpers
     atts = this.atts or this
     atts.time == 'true'
   time: -> xday.get().local().format('HH:mm')
-  year: -> xday.get().format('YYYY')
-  month: -> xday.get().format('MM')
+  year: -> xday.get().local().format('YYYY')
+  month: -> xday.get().local().format('MM')
   week: -> (i for i in [0...6])
   day: (week) -> dayRow(week)
 
