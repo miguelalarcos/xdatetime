@@ -22,7 +22,7 @@ describe 'test init', ->
     el = Blaze.renderWithData(Template.testing, {}, $('body')[0])
     Meteor.flush()
     back=$('[formid=0].xwidget').val()
-    bool = back.isSame(m)
+    bool = moment(back).isSame(m)
     expect(bool).toBe(true)
     Blaze.remove(el)
 
@@ -35,9 +35,10 @@ describe 'test...', ->
     Blaze.remove(el)
 
   it 'test set get', ->
-    m = moment.utc()
+    m = moment.utc().seconds(0).milliseconds(0).toDate()
     $('[formid=0].xwidget').val(m)
-    back = $('[formid=0].xwidget').val()
-    bool = m.isSame(back)
+    Meteor.flush()
+    back = moment($('[formid=0].xwidget').val())
+    bool = moment(m).isSame(back)
     expect(bool).toBe(true)
 

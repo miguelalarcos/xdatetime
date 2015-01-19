@@ -56,9 +56,9 @@ dayRow = (week)->
   ret = []
   day=xday.get()
   ini_month = day.clone().startOf('Month')
-  ini = day.clone().startOf('Month').add('days', 1-ini_month.isoWeekday())
+  ini = day.clone().startOf('Month').add(1-ini_month.isoWeekday(), 'days')
   end_month = day.clone().endOf('Month').startOf('Day')
-  end = day.clone().endOf('Month').add('days', 8-end_month.isoWeekday()).startOf('Day')
+  end = day.clone().endOf('Month').add(8-end_month.isoWeekday(), 'days').startOf('Day')
 
   while not ini.isSame(end)
     if ini_month.format('MM') == ini.format('MM')
@@ -67,7 +67,7 @@ dayRow = (week)->
       day_class = 'xcursive'
 
     ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), day_class: day_class}
-    ini.add('days', 1)
+    ini.add(1, 'days')
   ret[week*7...week*7+7]
 
 @_testing_xdatetime.dayRow = dayRow
@@ -78,7 +78,10 @@ Template.xdatetime.helpers
     path_ = path(atts.formid, atts.name)
     data.remove(path: path_)
     value = this.value or obj[atts.name]
-    if value is undefined then value = moment.utc().seconds(0).milliseconds(0) else value = value.seconds(0).milliseconds(0)
+    if value is undefined or value is null
+      value = moment.utc().seconds(0).milliseconds(0)
+    else
+      value = moment(value).seconds(0).milliseconds(0)
     data.insert({path:path_, value:value})
     null
   value: ->
@@ -103,14 +106,14 @@ $.valHooks['xdatetime'] =
     if not value
       return null
     format = $(el).attr('format')
-    moment.utc(moment(value, format))
+    moment.utc(moment(value, format)).toDate()
 
   set: (el, value)->
     formid = $(el).attr('formid')
     name = $(el).attr('name')
     path_ = path(formid, name)
     data.remove({path: path_})
-    value = value.seconds(0).milliseconds(0)
+    value = moment(value).seconds(0).milliseconds(0)
     data.insert({path: path_, value:value})
 
 $.fn.xdatetime = (name)->
