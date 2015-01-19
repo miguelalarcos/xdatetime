@@ -13,7 +13,7 @@ Package.onUse(function(api) {
   api.use('session', 'client');
   api.use('templating', 'client');
   api.use('reactive-var', 'client');
-  api.use('momentjs:moment', 'client');
+  api.use('momentjs:moment@2.8.4', 'client');
   api.addFiles('xdatetime.html', 'client');
   api.addFiles('xdatetime.coffee', 'client');
   api.addFiles('xdatetime.css', 'client');
