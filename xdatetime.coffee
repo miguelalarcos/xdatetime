@@ -9,6 +9,14 @@ data = new Meteor.Collection null
 path = (formid, name)-> formid + ':' + name
 
 Template.xdatetime.events
+  'focusout .xdatetime-input': (e,t)->
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    txtdate = $(t.find('.xdatetime-input')).val()
+    date = moment(txtdate, atts.format).utc()
+    if date.isSame(data.findOne(path: path_).value.startOf('day'))
+      $(t.find('.xdatetime-input')).val(date.local().format(atts.format))
+    data.update({path: path_}, {$set: {value: date}})
   'click .show-calendar': (e, t)->
     atts = t.data.atts or t.data
     xday.set(moment.utc().startOf('minute'))
@@ -130,7 +138,7 @@ $.valHooks['xdatetime'] =
     name = $(el).attr('name')
     path_ = path(formid, name)
     data.remove({path: path_})
-    value = moment(value).startOf('minute') #seconds(0).milliseconds(0)
+    value = moment.utc(value).startOf('minute')
     data.insert({path: path_, value:value})
 
 $.fn.xdatetime = (name)->
