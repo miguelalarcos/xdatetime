@@ -60,7 +60,7 @@ dayRow = (week)->
   day=xday.get().local()
   ini_month = day.clone().startOf('Month')
   ini = day.clone().startOf('Month').add(1-ini_month.isoWeekday(), 'days')
-  
+
   ini = ini.add(week, 'weeks')
 
   dt = ini_month.clone().add(1, 'month')
