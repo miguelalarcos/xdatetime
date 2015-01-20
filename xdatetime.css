@@ -24,3 +24,12 @@
     background-color: cyan;
 }
 
+.minus-minute:hover, .plus-minute:hover, .minus-hour:hover, .plus-hour:hover,
+.minus-month:hover, .plus-month:hover, .minus-year:hover, .plus-year:hover
+{
+    color: red;
+}
+
+.set-time:hover, .set-year:hover {
+    color: blue;
+}
