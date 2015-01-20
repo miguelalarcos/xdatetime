@@ -60,12 +60,17 @@ dayRow = (week)->
   day=xday.get().local()
   ini_month = day.clone().startOf('Month')
   ini = day.clone().startOf('Month').add(1-ini_month.isoWeekday(), 'days')
-  end_month = day.clone().endOf('Month').startOf('Day')
-  end = day.clone().endOf('Month').add(8-end_month.isoWeekday(), 'days').startOf('Day')
+  
+  ini = ini.add(week, 'weeks')
+
+  dt = ini_month.clone().add(1, 'month')
+  if ini.isAfter(dt) or ini.isSame(dt)
+    return []
+  end = ini.clone().add(7, 'days')
 
   while not ini.isSame(end)
     if ini_month.format('MM') == ini.format('MM')
-      if ini.clone().startOf('day').isSame(moment().startOf('day'))
+      if ini.isSame(moment().startOf('day'))
         day_class = 'xbold xunderline xtoday'
       else
         day_class = 'xbold'
@@ -74,7 +79,7 @@ dayRow = (week)->
 
     ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), day_class: day_class}
     ini.add(1, 'days')
-  ret[week*7...week*7+7]
+  ret
 
 @_testing_xdatetime.dayRow = dayRow
 
