@@ -13,3 +13,4 @@ nooitaf:semantic-ui
 momentjs:moment
 sanjo:jasmine
 velocity:html-reporter
+less
