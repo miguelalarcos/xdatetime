@@ -98,9 +98,9 @@ Template.xdatetime.helpers
     data.remove(path: path_)
     value = this.value or obj[atts.name]
     if value is undefined or value is null
-      value = moment.utc().seconds(0).milliseconds(0)
+      value = moment.utc().startOf('minute') #.seconds(0).milliseconds(0)
     else
-      value = moment(value).seconds(0).milliseconds(0)
+      value = moment(value).startOf('minute') #.seconds(0).milliseconds(0)
     data.insert({path:path_, value:value})
     null
   value: ->
@@ -118,9 +118,9 @@ Template.xdatetime.helpers
   show_time: ->
     atts = this.atts or this
     atts.time == 'true'
-  time: -> xday.get().local().format('HH:mm')
-  year: -> xday.get().local().format('YYYY')
-  month: -> xday.get().local().format('MM')
+  time: -> xday.get().clone().local().format('HH:mm')
+  year: -> xday.get().clone().local().format('YYYY')
+  month: -> xday.get().clone().local().format('MM')
   week: -> (i for i in [0...6])
   day: (week) -> dayRow(week)
 
