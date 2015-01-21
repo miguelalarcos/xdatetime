@@ -64,7 +64,7 @@ describe 'test ui', ->
     Meteor.flush()
     $('[formid=0] .show-calendar').trigger('click')
     Meteor.flush()
-    
+
   afterEach ->
     if show_calendar.get()
       $('[formid=0] .show-calendar').trigger('click')
