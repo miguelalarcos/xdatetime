@@ -65,7 +65,7 @@ Template.xdatetime.events
 
 dayRow = (week)->
   ret = []
-  day=xday.get().local()
+  day=xday.get().clone().local()
   ini_month = day.clone().startOf('Month')
   ini = day.clone().startOf('Month').add(1-ini_month.isoWeekday(), 'days')
 
@@ -79,13 +79,13 @@ dayRow = (week)->
   while not ini.isSame(end)
     if ini_month.format('MM') == ini.format('MM')
       if ini.isSame(moment().startOf('day'))
-        day_class = 'xbold xunderline xtoday'
+        decoration = 'xbold xunderline xtoday'
       else
-        day_class = 'xbold'
+        decoration = 'xbold'
     else
-      day_class = 'xcursive'
+      decoration = 'xcursive'
 
-    ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), day_class: day_class}
+    ret.push {value: ini.format('DD'), date: ini.format('YYYY-MM-DD'), decoration: decoration}
     ini.add(1, 'days')
   ret
 

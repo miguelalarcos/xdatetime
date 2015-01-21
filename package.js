@@ -17,5 +17,4 @@ Package.onUse(function(api) {
   api.addFiles('xdatetime.html', 'client');
   api.addFiles('xdatetime.coffee', 'client');
   api.addFiles('xdatetime.css', 'client');
-  api.addFiles('xdatetime.less', 'client');
 });
