@@ -21,7 +21,7 @@
 }
 
 .xdatetime-day:hover {
-    background-color: cyan;
+    background-color: grey;
 }
 
 .minus-minute:hover, .plus-minute:hover, .minus-hour:hover, .plus-hour:hover,

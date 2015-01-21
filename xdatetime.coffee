@@ -31,7 +31,8 @@ Template.xdatetime.events
     else
       date = this.date
     data.update({path: path_}, {$set: {value: moment(date, 'YYYY-MM-DD HH:mm').utc()}})
-    show_calendar.set(false)
+    unless atts.time == 'true'
+      show_calendar.set(false)
     xday.set(moment.utc().startOf('minute'))
   'click .set-year': (e,t) ->
     year = $(t.find('.xdatetime-year')).val()
@@ -44,6 +45,7 @@ Template.xdatetime.events
     date = date.format('YYYY-MM-DD')
     datetime = date + ' ' + time
     data.update({path: path_}, {$set: {value: moment(datetime, 'YYYY-MM-DD HH:mm').utc()}})
+    show_calendar.set(false)
   'click .minus-month': (e,t)->
     xday.set(xday.get().subtract(1, 'months'))
   'click .plus-month': (e,t)->
