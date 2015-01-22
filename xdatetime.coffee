@@ -15,7 +15,7 @@ Template.xdatetime.events
     txtdate = $(t.find('.xdatetime-input')).val()
     date = moment(txtdate, atts.format).utc()
     if date.isSame(data.findOne(path: path_).value.startOf('day'))
-      $(t.find('.xdatetime-input')).val(date.local().format(atts.format))
+      $(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
     data.update({path: path_}, {$set: {value: date}})
   'click .show-calendar': (e, t)->
     atts = t.data.atts or t.data
@@ -102,7 +102,7 @@ Template.xdatetime.helpers
     if value is undefined or value is null
       value = moment.utc().startOf('minute')
     else
-      value = moment.utc(value).startOf('minute') 
+      value = moment.utc(value).startOf('minute')
     data.insert({path:path_, value:value})
     null
   value: ->
