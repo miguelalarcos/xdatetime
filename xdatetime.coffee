@@ -100,9 +100,9 @@ Template.xdatetime.helpers
     data.remove(path: path_)
     value = this.value or obj[atts.name]
     if value is undefined or value is null
-      value = moment.utc().startOf('minute') #.seconds(0).milliseconds(0)
+      value = moment.utc().startOf('minute')
     else
-      value = moment(value).startOf('minute') #.seconds(0).milliseconds(0)
+      value = moment.utc(value).startOf('minute') 
     data.insert({path:path_, value:value})
     null
   value: ->
