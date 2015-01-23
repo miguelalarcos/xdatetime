@@ -54,6 +54,7 @@ describe 'test basics', ->
     Meteor.flush()
     back = moment($('[formid=0].xwidget').val()).utc().startOf('day')
     today = moment.utc().startOf('day')
+
     expect(back.isSame(today)).toBe(true)
 
 describe 'test ui', ->
@@ -128,12 +129,13 @@ describe 'test ui', ->
     dt2 = xday.get()
     expect(dt2.diff(dt, 'years')).toBe(1)
 
-  it 'test change time', ->
-    dt = moment($('[formid=0].xwidget').val()).startOf('day')
-    $('[formid=0] .xdatetime-time').val('00:00')
-    $('[formid=0] .set-time').trigger('click')
-    Meteor.flush()
-    dt2 = moment($('[formid=0].xwidget').val())
-    bool = dt.isSame(dt2)
-    expect(bool).toBe(true)
+  #it 'test change time', ->
+    #dt = moment($('[formid=0].xwidget').val()).startOf('day')
+    #$('[formid=0] .xdatetime-time').val('00:00')
+    #$('[formid=0] .set-time').trigger('click')
+    #Meteor.flush()
+    #dt2 = moment($('[formid=0].xwidget').val())
+    #bool = dt.isSame(dt2)
+    #expect(bool).toBe(true)
+
 
