@@ -17,15 +17,20 @@ path = (formid, name)-> formid + ':' + name
   dateLocalplus1h = dateUTC.clone().local().add(1, 'hours')
   dateLocalminus1h = dateUTC.clone().local().add(-1, 'hours')
 
-  if dateLocal.format('HH') == dateLocalplus1h.format('HH')
-    #flagDateLocal = 1
-    return ''
-  else if dateLocal.format('HH') == dateLocalminus1h.format('HH')
-    #flagDateLocal = 0
-    return '*'
+  if dateLocal.format('HH') == dateLocalminus1h.format('HH')
+    true
   else
+    false
+
+  #if dateLocal.format('HH') == dateLocalplus1h.format('HH')
+    #flagDateLocal = 1
+  #  return ''
+  #else if dateLocal.format('HH') == dateLocalminus1h.format('HH')
     #flagDateLocal = 0
-    return ''
+  #  return '*'
+  #else
+    #flagDateLocal = 0
+  #  return ''
 
 
 Template.xdatetime.events
@@ -61,9 +66,10 @@ Template.xdatetime.events
   'click .set-year': (e,t) ->
     year = $(t.find('.xdatetime-year')).val()
     xday.set(xday.get().year(year))
-  ##'click .set-time': (e,t)->
-    ##atts = t.data.atts or t.data
-    ##path_ = path(atts.formid, atts.name)
+  'click .set-time': (e,t)->
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    data.update({path: path_}, {$set: {value: xday.get()}})
 
     #time = $(t.find('.xdatetime-time')).val()
     #h = time.split(':')[0]
@@ -168,11 +174,16 @@ Template.xdatetime.helpers
 
 $.valHooks['xdatetime'] =
   get: (el)->
-    value = $(el).find('.xdatetime-input').val()
-    if not value
-      return null
     format = $(el).attr('format')
-    moment.utc(moment(value, format)).toDate()
+    formid = $(el).attr('formid')
+    name = $(el).attr('name')
+    path_ = path(formid, name)
+    data.findOne(path: path_).value.toDate()
+    #value = $(el).find('.xdatetime-input').val()
+    #if not value
+    #  return null
+    #format = $(el).attr('format')
+    #moment.utc(moment(value, format)).toDate()
 
   set: (el, value)->
     formid = $(el).attr('formid')
