@@ -8,6 +8,29 @@ data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
 
+flagDateLocal = 0
+
+@UTCtoLocalDST = UTCtoLocalDST = (dateUTC) ->
+  dateUTC = dateUTC.clone().startOf('minute')
+  dateLocal = dateUTC.clone().local()
+
+  dateLocalplus1h = dateUTC.clone().local().add(1, 'hours')
+  dateLocalminus1h = dateUTC.clone().local().add(-1, 'hours')
+
+  if dateLocal.format('HH') == dateLocalplus1h.format('HH')
+    flagDateLocal = 1
+    console.log 'A'
+    return 'A'
+  else if dateLocal.format('HH') == dateLocalminus1h.format('HH')
+    flagDateLocal = 0
+    console.log 'B'
+    return 'B'
+  else
+    console.log 'nada'
+    flagDateLocal = 0
+    return ''
+
+
 Template.xdatetime.events
   'focusout .xdatetime-input': (e,t)->
     atts = t.data.atts or t.data
@@ -17,6 +40,7 @@ Template.xdatetime.events
     if date.isSame(data.findOne(path: path_).value.startOf('day'))
       $(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
     data.update({path: path_}, {$set: {value: date}})
+    #xday.set ??
   'click .show-calendar': (e, t)->
     atts = t.data.atts or t.data
     xday.set(moment.utc().startOf('minute'))
@@ -30,10 +54,12 @@ Template.xdatetime.events
       date = this.date + ' ' + value
     else
       date = this.date
-    data.update({path: path_}, {$set: {value: moment(date, 'YYYY-MM-DD HH:mm').utc()}})
+    m_ = moment(date, 'YYYY-MM-DD HH:mm').utc()
+    data.update({path: path_}, {$set: {value: m_}})
     unless atts.time == 'true'
       show_calendar.set(false)
-    xday.set(moment.utc().startOf('minute'))
+    #xday.set(moment.utc().startOf('minute'))
+    xday.set m_.startOf('minute')
   'click .set-year': (e,t) ->
     year = $(t.find('.xdatetime-year')).val()
     xday.set(xday.get().year(year))
@@ -42,10 +68,21 @@ Template.xdatetime.events
     path_ = path(atts.formid, atts.name)
     time = $(t.find('.xdatetime-time')).val()
     date = moment($(t.find('.xdatetime-input')).val(), atts.format)
+    offset = date.format('Z')
+    console.log 'offset', offset
+
+    offset = parseInt(offset) + flagDateLocal
     date = date.format('YYYY-MM-DD')
-    datetime = date + ' ' + time
-    data.update({path: path_}, {$set: {value: moment(datetime, 'YYYY-MM-DD HH:mm').utc()}})
+
+    datetime = date + ' ' + time + '+0' + offset + ':00'
+
+    m_ = moment(datetime, 'YYYY-MM-DD HH:mmZZ').utc()
+    console.log datetime, m_.format()
+
+    data.update({path: path_}, {$set: {value: m_}})
     show_calendar.set(false)
+
+    # xday.set ??
   'click .minus-month': (e,t)->
     xday.set(xday.get().subtract(1, 'months'))
   'click .plus-month': (e,t)->
@@ -125,6 +162,7 @@ Template.xdatetime.helpers
   month: -> xday.get().clone().local().format('MM')
   week: -> (i for i in [0...6])
   day: (week) -> dayRow(week)
+  checkDST: -> UTCtoLocalDST xday.get()
 
 
 $.valHooks['xdatetime'] =
