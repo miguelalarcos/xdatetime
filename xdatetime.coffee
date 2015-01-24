@@ -196,6 +196,7 @@ Template.xdatetime.helpers
   week: -> (i for i in [0...6])
 
   day: (week, atts) ->
+    atts = atts.atts or atts
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
     dayRow(week, date.clone())
