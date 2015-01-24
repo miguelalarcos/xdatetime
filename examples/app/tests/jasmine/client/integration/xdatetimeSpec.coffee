@@ -24,6 +24,20 @@ describe 'test init', ->
     expect(bool).toBe(true)
     Blaze.remove(el)
 
+describe 'test no degeneration', ->
+  it 'test', ->
+    el = Blaze.renderWithData(Template.testing, {datetime1: moment('2015-01-01').toDate()}, $('body')[0])
+    Meteor.flush()
+    date = moment().startOf('minute').utc().toDate()
+    $('[formid=0].xwidget').val(date)
+    date2 = $('[formid=0].xwidget').val()
+    $('[formid=0].xwidget').val(date2)
+    date3 = $('[formid=0].xwidget').val()
+    bool = moment(date).isSame(moment(date3))
+    expect(bool).toBe(true)
+    Blaze.remove(el)
+
+
 describe 'test basics', ->
   el= null
   beforeEach ->
