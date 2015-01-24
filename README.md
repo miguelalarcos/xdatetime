@@ -3,7 +3,8 @@ xdatetime
 
 A datetime widget. This package is used by [afwrap-xdatetime](https://github.com/miguelalarcos/afwrap-xdatetime).
 
-In the examples folder you have a working example and a battery of tests with ```Jasmine```.
+Explanation
+-----------
 
 Example:
 ```coffee
@@ -20,4 +21,8 @@ Template.xdatetime_view.helpers
 ```
 
 Note that the pair *formid* and *name* has to be unique in the whole app. The name attribute is the object attribute you are displaying.
+
+The widget is DST aware. If you navigate to a date-time which is a repetition (e.g. Spain 25-10-2015 repetition of 02:30), the color of the time will be red. Of course date-time will be returned always as a Date object from UTC moment.
+
+In the examples folder you have a working example and a battery of tests with ```Jasmine```.
 
