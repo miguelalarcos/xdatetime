@@ -2,13 +2,12 @@
 current_input = null
 show_calendar = new ReactiveVar(false)
 @_testing_xdatetime.show_calendar = show_calendar
-xday = new ReactiveVar(moment.utc().startOf('minute'))
-@_testing_xdatetime.xday = xday
+#xday = new ReactiveVar(moment.utc().startOf('minute'))
+#@_testing_xdatetime.xday = xday
 data = new Meteor.Collection null
+@_testing_xdatetime.data = data
 
 path = (formid, name)-> formid + ':' + name
-
-#flagDateLocal = 0
 
 @UTCtoLocalDST = UTCtoLocalDST = (dateUTC) ->
   dateUTC = dateUTC.clone().startOf('minute')
@@ -21,16 +20,6 @@ path = (formid, name)-> formid + ':' + name
     true
   else
     false
-
-  #if dateLocal.format('HH') == dateLocalplus1h.format('HH')
-    #flagDateLocal = 1
-  #  return ''
-  #else if dateLocal.format('HH') == dateLocalminus1h.format('HH')
-    #flagDateLocal = 0
-  #  return '*'
-  #else
-    #flagDateLocal = 0
-  #  return ''
 
 
 Template.xdatetime.events
@@ -45,15 +34,14 @@ Template.xdatetime.events
     #xday.set ??
   'click .show-calendar': (e, t)->
     atts = t.data.atts or t.data
-    xday.set(moment.utc().startOf('minute'))
+    #xday.set(moment.utc().startOf('minute'))
     current_input = path(atts.formid, atts.name)
     show_calendar.set(not show_calendar.get())
   'click .xdatetime-day': (e, t)->
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
     if atts.time == 'true'
-      #value = $(t.find('.xdatetime-time')).val()
-      value = xday.get().clone().local().format('HH:mm')
+      value = data.findOne(path: path_).value.clone().local().format('HH:mm')
       date = this.date + ' ' + value
     else
       date = this.date
@@ -62,55 +50,81 @@ Template.xdatetime.events
     unless atts.time == 'true'
       show_calendar.set(false)
     #xday.set(moment.utc().startOf('minute'))
-    xday.set m_.startOf('minute')
+    #xday.set m_.startOf('minute')
   'click .set-year': (e,t) ->
-    year = $(t.find('.xdatetime-year')).val()
-    xday.set(xday.get().year(year))
-  'click .set-time': (e,t)->
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
-    data.update({path: path_}, {$set: {value: xday.get()}})
+    date = data.findOne(path: path_).value.clone()
+    year = $(t.find('.xdatetime-year')).val()
+    date = date.local().year(year).utc()
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().year(year))
+  #'click .set-time': (e,t)->
+    #atts = t.data.atts or t.data
+    #path_ = path(atts.formid, atts.name)
 
-    #time = $(t.find('.xdatetime-time')).val()
-    #h = time.split(':')[0]
-    #m = time.split(':')[1]
-    #xday.set xday.get().clone().local().hour(h).minute(m).utc()
-    #date = moment($(t.find('.xdatetime-input')).val(), atts.format)
-    #offset = date.format('Z')
-    #console.log 'offset', offset
-    #offset = parseInt(offset) + flagDateLocal
-    #date = date.format('YYYY-MM-DD')
-    #datetime = date + ' ' + time + '+0' + offset + ':00'
-    #m_ = moment(datetime, 'YYYY-MM-DD HH:mmZZ').utc()
-    #console.log datetime, m_.format()
-
-    ##m_ = xday.get()
-    ##console.log m_.format(), m_.clone().local().format()
-    ##data.update({path: path_}, {$set: {value: m_}})
-    ##show_calendar.set(false)
-
+    #data.update({path: path_}, {$set: {value: xday.get()}})
   'click .minus-month': (e,t)->
-    xday.set(xday.get().subtract(1, 'months'))
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value.clone()
+    date.subtract(1, 'months')
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().subtract(1, 'months'))
   'click .plus-month': (e,t)->
-    xday.set(xday.get().add(1, 'months'))
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value.clone()
+    date.add(1, 'months')
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().add(1, 'months'))
   'click .minus-year': (e,t)->
-    xday.set(xday.get().subtract(1, 'years'))
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value.clone()
+    date.subtract(1, 'years')
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().subtract(1, 'years'))
   'click .plus-year': (e,t)->
-    xday.set(xday.get().add(1, 'years'))
-
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value.clone()
+    date.add(1, 'years')
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().add(1, 'years'))
   'click .minus-hour': (e,t)->
-    xday.set(xday.get().subtract(1, 'hours'))
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value.clone()
+    date.subtract(1, 'hours')
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().subtract(1, 'hours'))
   'click .plus-hour': (e,t)->
-    xday.set(xday.get().add(1, 'hours'))
-
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value.clone()
+    date.add(1, 'hours')
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().add(1, 'hours'))
   'click .minus-minute': (e,t)->
-    xday.set(xday.get().subtract(1, 'minutes'))
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value.clone()
+    date.subtract(1, 'minutes')
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().subtract(1, 'minutes'))
   'click .plus-minute': (e,t)->
-    xday.set(xday.get().add(1, 'minutes'))
+    atts = t.data.atts or t.data
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value.clone()
+    date.add(1, 'minutes')
+    data.update({path: path_}, {$set: {value: date}})
+    #xday.set(xday.get().add(1, 'minutes'))
 
-dayRow = (week)->
+dayRow = (week, date)->
   ret = []
-  day=xday.get().clone().local()
+  #day=xday.get().clone().local()
+  day = date.clone().local()
   ini_month = day.clone().startOf('Month')
   ini = day.clone().startOf('Month').add(1-ini_month.isoWeekday(), 'days')
 
@@ -147,7 +161,7 @@ Template.xdatetime.helpers
     else
       value = moment.utc(value).startOf('minute')
     data.insert({path:path_, value:value})
-    xday.set value
+    #xday.set value
     null
   value: ->
     atts = this.atts or this
@@ -164,26 +178,43 @@ Template.xdatetime.helpers
   show_time: ->
     atts = this.atts or this
     atts.time == 'true'
-  time: -> xday.get().clone().local().format('HH:mm')
-  year: -> xday.get().clone().local().format('YYYY')
-  month: -> xday.get().clone().local().format('MM')
+  time: ->
+    atts = this.atts or this
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value
+    date.clone().local().format('HH:mm')
+    #xday.get().clone().local().format('HH:mm')
+  year: ->
+    atts = this.atts or this
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value
+    date.clone().local().format('YYYY')
+    #xday.get().clone().local().format('YYYY')
+  month: ->
+    atts = this.atts or this
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value
+    date.clone().local().format('MM')
+    #xday.get().clone().local().format('MM')
   week: -> (i for i in [0...6])
-  day: (week) -> dayRow(week)
-  checkDST: -> UTCtoLocalDST xday.get()
+  day: (week, atts) ->
+    #atts = this.atts or this
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value
+    dayRow(week, date.clone())
+  checkDST: ->
+    atts = this.atts or this
+    path_ = path(atts.formid, atts.name)
+    date = data.findOne(path: path_).value
+    UTCtoLocalDST date.clone() #xday.get()
 
 
 $.valHooks['xdatetime'] =
   get: (el)->
-    format = $(el).attr('format')
     formid = $(el).attr('formid')
     name = $(el).attr('name')
     path_ = path(formid, name)
     data.findOne(path: path_).value.toDate()
-    #value = $(el).find('.xdatetime-input').val()
-    #if not value
-    #  return null
-    #format = $(el).attr('format')
-    #moment.utc(moment(value, format)).toDate()
 
   set: (el, value)->
     formid = $(el).attr('formid')

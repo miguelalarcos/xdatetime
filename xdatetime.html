@@ -23,7 +23,7 @@
                 {{#each week}}
                 <div>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    {{#each day this}}
+                    {{#each day this ..}}
                     <span class="xdatetime-day {{decoration}}" date={{this.date}}>{{this.value}}&nbsp;&nbsp;</span>
                     {{/each}}
                 </div>
