@@ -130,6 +130,17 @@ describe 'test ui', ->
     dt = data.findOne(path: path_).value
     current_year = parseInt($('[formid=0] .xdatetime-year').val())
     $('[formid=0] .xdatetime-year').val(current_year+1)
-    $('[formid=0] .set-year').trigger('click')
+
+    $('[formid=0] .xdatetime-year').trigger('focusin')
+    $('[formid=0] .xdatetime-year').trigger('focusout')
     dt2 = data.findOne(path: path_).value
     expect(dt2.diff(dt, 'years')).toBe(1)
+
+  it 'test change input date', ->
+    path_ = '0:datetime1'
+    $('[formid=0] .xdatetime-input').val('01-01-2015 00:00')
+    $('[formid=0] .xdatetime-input').trigger('focusin')
+    $('[formid=0] .xdatetime-input').trigger('focusout')
+    dt_format = data.findOne(path: path_).value.clone().local().format('DD-MM-YYYY HH:mm')
+    expect(dt_format).toBe('01-01-2015 00:00')
+

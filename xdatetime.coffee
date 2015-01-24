@@ -49,7 +49,7 @@ Template.xdatetime.events
     unless atts.time == 'true'
       show_calendar.set(false)
 
-  'click .set-year': (e,t) ->
+  'focusout .xdatetime-year': (e,t) ->
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value.clone()
