@@ -14,7 +14,8 @@
                     <span class="ui input form">
                         <span class="inline field">
                             <i class="minus icon minus-year"></i>
-                            <input type="text" class="xdatetime-year" value="{{year}}" size="4">
+                            <!--<input type="text" class="xdatetime-year" value="{{year}}" size="4">-->
+                            {{year}}
                             <i class="plus icon plus-year"></i>
                         </span>
                     </span>
@@ -33,11 +34,7 @@
                     <span class="inline field">
                         <i class="minus icon minus-hour"></i>
                         <i class="plus icon plus-hour"></i>
-                        {{#if checkDST}}
-                            <span class="red">&nbsp;&nbsp;{{time}}&nbsp;&nbsp;</span>
-                        {{else}}
-                            &nbsp;&nbsp;{{time}}&nbsp;&nbsp;
-                        {{/if}}
+                        <span class="{{checkDST}}">&nbsp;&nbsp;{{time}}&nbsp;&nbsp;</span>
                         <i class="minus icon minus-minute"></i>
                         <i class="plus icon plus-minute"></i>
                     </span>

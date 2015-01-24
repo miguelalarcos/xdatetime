@@ -32,7 +32,6 @@ Template.xdatetime.events
 
   'click .show-calendar': (e, t)->
     atts = t.data.atts or t.data
-    #xday.set(moment.utc().startOf('minute'))
     current_input = path(atts.formid, atts.name)
     show_calendar.set(not show_calendar.get())
 
@@ -48,14 +47,6 @@ Template.xdatetime.events
     data.update({path: path_}, {$set: {value: m_}})
     unless atts.time == 'true'
       show_calendar.set(false)
-
-  'focusout .xdatetime-year': (e,t) ->
-    atts = t.data.atts or t.data
-    path_ = path(atts.formid, atts.name)
-    date = data.findOne(path: path_).value.clone()
-    year = $(t.find('.xdatetime-year')).val()
-    date = date.local().year(year).utc()
-    data.update({path: path_}, {$set: {value: date}})
 
   'click .minus-month': (e,t)->
     atts = t.data.atts or t.data
@@ -205,7 +196,7 @@ Template.xdatetime.helpers
     atts = this.atts or this
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
-    UTCisLocalRepeated date.clone()
+    if UTCisLocalRepeated date.clone() then 'red' else ''
 
 
 $.valHooks['xdatetime'] =
