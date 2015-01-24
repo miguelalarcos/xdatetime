@@ -1,5 +1,4 @@
 dayRow = @_testing_xdatetime.dayRow
-#xday = @_testing_xdatetime.xday
 show_calendar = @_testing_xdatetime.show_calendar
 data = @_testing_xdatetime.data
 
@@ -77,22 +76,12 @@ describe 'test ui', ->
     dt2 = data.findOne(path: path_).value
     expect(dt.diff(dt2, 'minutes')).toBe(1)
 
-    #dt = xday.get().clone()
-    #$('[formid=0] .minus-minute').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt.diff(dt2, 'minutes')).toBe(1)
-
   it 'test plus 1 minute', ->
     path_ = '0:datetime1'
     dt = data.findOne(path: path_).value
     $('[formid=0] .plus-minute').trigger('click')
     dt2 = data.findOne(path: path_).value
     expect(dt.diff(dt2, 'minutes')).toBe(-1)
-
-    #dt = xday.get().clone()
-    #$('[formid=0] .plus-minute').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt.diff(dt2, 'minutes')).toBe(-1)
 
   it 'test minus 1 hour', ->
     path_ = '0:datetime1'
@@ -101,22 +90,12 @@ describe 'test ui', ->
     dt2 = data.findOne(path: path_).value
     expect(dt.diff(dt2, 'hours')).toBe(1)
 
-    #dt = xday.get().clone()
-    #$('[formid=0] .minus-hour').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt.diff(dt2, 'hours')).toBe(1)
-
   it 'test plus 1 hour', ->
     path_ = '0:datetime1'
     dt = data.findOne(path: path_).value
     $('[formid=0] .plus-hour').trigger('click')
     dt2 = data.findOne(path: path_).value
     expect(dt.diff(dt2, 'hours')).toBe(-1)
-
-    #dt = xday.get().clone()
-    #$('[formid=0] .plus-hour').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt.diff(dt2, 'hours')).toBe(-1)
 
   it 'test minus 1 month', ->
     path_ = '0:datetime1'
@@ -125,22 +104,12 @@ describe 'test ui', ->
     dt2 = data.findOne(path: path_).value
     expect(dt.diff(dt2, 'months')).toBe(1)
 
-    #dt = xday.get().clone()
-    #$('[formid=0] .minus-month').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt.diff(dt2, 'months')).toBe(1)
-
   it 'test plus 1 month', ->
     path_ = '0:datetime1'
     dt = data.findOne(path: path_).value
     $('[formid=0] .plus-month').trigger('click')
     dt2 = data.findOne(path: path_).value
     expect(dt.diff(dt2, 'months')).toBe(-1)
-
-    #dt = xday.get().clone()
-    #$('[formid=0] .plus-month').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt.diff(dt2, 'months')).toBe(-1)
 
   it 'test minus 1 year', ->
     path_ = '0:datetime1'
@@ -149,24 +118,12 @@ describe 'test ui', ->
     dt2 = data.findOne(path: path_).value
     expect(dt.diff(dt2, 'years')).toBe(1)
 
-    #dt = xday.get().clone()
-    #$('[formid=0] .minus-year').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt.diff(dt2, 'years')).toBe(1)
-
   it 'test plus 1 year', ->
     path_ = '0:datetime1'
     dt = data.findOne(path: path_).value
     $('[formid=0] .plus-year').trigger('click')
     dt2 = data.findOne(path: path_).value
     expect(dt.diff(dt2, 'years')).toBe(-1)
-
-    #dt = xday.get().clone()
-    #$('[formid=0] .plus-year').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt.diff(dt2, 'years')).toBe(-1)
-
-
 
   it 'test change year', ->
     path_ = '0:datetime1'
@@ -176,13 +133,3 @@ describe 'test ui', ->
     $('[formid=0] .set-year').trigger('click')
     dt2 = data.findOne(path: path_).value
     expect(dt2.diff(dt, 'years')).toBe(1)
-
-    #dt = xday.get().clone()
-    #current_year = parseInt($('[formid=0] .xdatetime-year').val())
-    #$('[formid=0] .xdatetime-year').val(current_year+1)
-    #$('[formid=0] .set-year').trigger('click')
-    #dt2 = xday.get()
-    #expect(dt2.diff(dt, 'years')).toBe(1)
-
-
-

@@ -34,11 +34,10 @@
                         <i class="minus icon minus-hour"></i>
                         <i class="plus icon plus-hour"></i>
                         {{#if checkDST}}
-                            <i class="asterisk icon red"></i>
+                            <span class="red">&nbsp;&nbsp;{{time}}&nbsp;&nbsp;</span>
+                        {{else}}
+                            &nbsp;&nbsp;{{time}}&nbsp;&nbsp;
                         {{/if}}
-                        <!--<input type="text" class="xdatetime-time" value="{{time}}" size="5">-->
-                        &nbsp;&nbsp;{{time}}&nbsp;&nbsp;
-                        <i class="checkmark icon set-time"></i>
                         <i class="minus icon minus-minute"></i>
                         <i class="plus icon plus-minute"></i>
                     </span>
