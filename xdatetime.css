@@ -14,9 +14,6 @@
     position: absolute;
     z-index: 2;
     cursor: pointer;
-}
-
-.xdatetime-popover{
     background-color: white;
 }
 
