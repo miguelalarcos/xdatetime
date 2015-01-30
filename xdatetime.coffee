@@ -7,7 +7,7 @@ data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
 
-@UTCisLocalRepeated = UTCisLocalRepeated = (dateUTC) ->
+UTCisLocalRepeated = (dateUTC) ->
   dateUTC = dateUTC.clone().startOf('minute')
   dateLocal = dateUTC.clone().local()
 
@@ -141,7 +141,10 @@ Template.xdatetime.helpers
     data.remove(path: path_)
     value = this.value or obj[atts.name]
     if value is undefined or value is null
-      value = moment.utc().startOf('minute')
+      if atts.time == 'true'
+        value = moment.utc().startOf('minute')
+      else
+        value = moment(value).startOf('day').utc()
     else
       if atts.time == 'true'
         value = moment.utc(value).startOf('minute')
