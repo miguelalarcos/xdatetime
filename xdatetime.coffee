@@ -144,12 +144,14 @@ Template.xdatetime.helpers
       if atts.time == 'true'
         value = moment.utc().startOf('minute')
       else
-        value = moment(value).startOf('day').utc()
+        #value = moment(value).startOf('day').utc()
+        value = moment.utc().startOf('day')
     else
       if atts.time == 'true'
         value = moment.utc(value).startOf('minute')
       else
-        value = moment(value).startOf('day').utc()
+        #value = moment(value).startOf('day').utc()
+        value = moment.utc(value).startOf('day')
     data.insert({path:path_, value:value})
     null
 
