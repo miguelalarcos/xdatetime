@@ -38,14 +38,14 @@ Template.xdatetime.events
   'click .xdatetime-day': (e, t)->
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
-    if atts.time == 'true'
+    if atts.time == true
       value = data.findOne(path: path_).value.clone().local().format('HH:mm')
       date = this.date + ' ' + value
     else
       date = this.date
     m_ = moment(date, 'YYYY-MM-DD HH:mm').utc()
     data.update({path: path_}, {$set: {value: m_}})
-    unless atts.time == 'true'
+    unless atts.time == true
       show_calendar.set(false)
 
   'click .minus-month': (e,t)->
@@ -141,13 +141,13 @@ Template.xdatetime.helpers
     data.remove(path: path_)
     value = this.value or obj[atts.name]
     if value is undefined or value is null
-      if atts.time == 'true'
+      if atts.time == true
         value = moment.utc().startOf('minute')
       else
         value = moment().startOf('day').utc()
         #value = moment.utc().startOf('day')
     else
-      if atts.time == 'true'
+      if atts.time == true
         value = moment.utc(value).startOf('minute')
       else
         value = moment(value).startOf('day').utc()
@@ -169,7 +169,7 @@ Template.xdatetime.helpers
 
   show_time: ->
     atts = this.atts or this
-    atts.time == 'true'
+    atts.time == true
 
   time: ->
     atts = this.atts or this

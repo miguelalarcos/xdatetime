@@ -14,7 +14,7 @@ Template.xdatetime_view.helpers
 
 ```html
 {{#with data}}
-    {{> xdatetime formid='1' name='datetime1' time='true' format='DD-MM-YYYY HH:mm'}}
+    {{> xdatetime formid='1' name='datetime1' time=true format='DD-MM-YYYY HH:mm'}}
     <br>
     {{> xdatetime formid='1' name='datetime2' format='DD-MM-YYYY'}}
 {{/with}}
