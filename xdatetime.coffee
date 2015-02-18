@@ -25,9 +25,16 @@ Template.xdatetime.events
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
     txtdate = $(t.find('.xdatetime-input')).val()
-    date = moment(txtdate, atts.format).utc()
+    date = moment(txtdate, atts.format, true).utc()
+    if not date.isValid()
+      if atts.time
+        date = moment.utc()
+      else
+        date = moment().startOf('day').utc()
+      $(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
     if date.isSame(data.findOne(path: path_).value.startOf('day'))
       $(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
+
     data.update({path: path_}, {$set: {value: date}})
 
   'click .show-calendar': (e, t)->
