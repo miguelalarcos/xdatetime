@@ -30,7 +30,7 @@ Template.xdatetime.events
       if atts.time
         date = moment.utc()
       else
-        date = moment().startOf('day').utc()
+        date = moment.utc().startOf('day')
       $(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
     if date.isSame(data.findOne(path: path_).value.startOf('day'))
       $(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
@@ -151,14 +151,12 @@ Template.xdatetime.helpers
       if atts.time == true
         value = moment.utc().startOf('minute')
       else
-        value = moment().startOf('day').utc()
-        #value = moment.utc().startOf('day')
+        value = moment.utc().startOf('day')
     else
       if atts.time == true
         value = moment.utc(value).startOf('minute')
       else
-        value = moment(value).startOf('day').utc()
-        #value = moment.utc(value).startOf('day')
+        value = moment.utc(value).startOf('day')
     data.insert({path:path_, value:value})
     null
 
