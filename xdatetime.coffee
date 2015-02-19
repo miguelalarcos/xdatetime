@@ -7,14 +7,10 @@ data = new Meteor.Collection null
 
 path = (formid, name)-> formid + ':' + name
 
-UTCisLocalRepeated = (dateUTC) ->
-  dateUTC = dateUTC.clone().startOf('minute')
-  dateLocal = dateUTC.clone().local()
-
-  #dateLocalplus1h = dateUTC.clone().local().add(1, 'hours')
-  dateLocalminus1h = dateUTC.clone().local().add(-1, 'hours')
-
-  if dateLocal.format('HH') == dateLocalminus1h.format('HH')
+isLocalRepeated = (m) ->
+  dateLocal = m
+  dateLocalMinus1h = m.clone().add(-1, 'hours')
+  if dateLocal.format('HH') == dateLocalMinus1h.format('HH')
     true
   else
     false
@@ -28,12 +24,16 @@ Template.xdatetime.events
     date = moment(txtdate, atts.format, true).utc()
     if not date.isValid()
       if atts.time
-        date = moment.utc()
+        #date = moment.utc()
+        date = moment()
       else
-        date = moment.utc().startOf('day')
-      $(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
+        #date = moment.utc().startOf('day')
+        date = moment().startOf('day')
+      #$(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
+      $(t.find('.xdatetime-input')).val(date.format(atts.format))
     if date.isSame(data.findOne(path: path_).value.startOf('day'))
-      $(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
+      #$(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
+      $(t.find('.xdatetime-input')).val(date.format(atts.format))
 
     data.update({path: path_}, {$set: {value: date}})
 
@@ -46,11 +46,13 @@ Template.xdatetime.events
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
     if atts.time == true
-      value = data.findOne(path: path_).value.clone().local().format('HH:mm')
+      #value = data.findOne(path: path_).value.clone().local().format('HH:mm')
+      value = data.findOne(path: path_).value.format('HH:mm')
       date = this.date + ' ' + value
     else
       date = this.date
-    m_ = moment(date, 'YYYY-MM-DD HH:mm').utc()
+    #m_ = moment(date, 'YYYY-MM-DD HH:mm').utc()
+    m_ = moment(date, 'YYYY-MM-DD HH:mm')
     data.update({path: path_}, {$set: {value: m_}})
     unless atts.time == true
       show_calendar.set(false)
@@ -114,7 +116,8 @@ Template.xdatetime.events
 
 dayRow = (week, date)->
   ret = []
-  day = date.clone().local()
+  #day = date.clone().local()
+  day = date.clone()
   ini_month = day.clone().startOf('Month')
   ini = day.clone().startOf('Month').add(1-ini_month.isoWeekday(), 'days')
 
@@ -149,14 +152,18 @@ Template.xdatetime.helpers
     value = this.value or obj[atts.name]
     if value is undefined or value is null
       if atts.time == true
-        value = moment.utc().startOf('minute')
+        #value = moment.utc().startOf('minute')
+        value = moment().startOf('minute')
       else
-        value = moment.utc().startOf('day')
+        #value = moment.utc().startOf('day')
+        value = moment().startOf('day')
     else
       if atts.time == true
-        value = moment.utc(value).startOf('minute')
+        #value = moment.utc(value).startOf('minute')
+        value = moment(value).startOf('minute')
       else
-        value = moment.utc(value).startOf('day')
+        #value = moment.utc(value).startOf('day')
+        value = moment(value).startOf('day')
     data.insert({path:path_, value:value})
     null
 
@@ -164,7 +171,8 @@ Template.xdatetime.helpers
     atts = this.atts or this
     item = data.findOne(path: path(atts.formid, atts.name))
     if item
-      item.value.local().format(atts.format)
+      #item.value.local().format(atts.format)
+      item.value.format(atts.format)
     else
       null
 
@@ -180,19 +188,22 @@ Template.xdatetime.helpers
     atts = this.atts or this
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
-    date.clone().local().format('HH:mm')
+    #date.clone().local().format('HH:mm')
+    date.format('HH:mm')
 
   year: ->
     atts = this.atts or this
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
-    date.clone().local().format('YYYY')
+    #date.clone().local().format('YYYY')
+    date.format('YYYY')
 
   month: ->
     atts = this.atts or this
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
-    date.clone().local().format('MM')
+    #date.clone().local().format('MM')
+    date.format('MM')
 
   week: -> (i for i in [0...6])
 
@@ -206,7 +217,7 @@ Template.xdatetime.helpers
     atts = this.atts or this
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
-    if UTCisLocalRepeated date.clone() then 'red' else ''
+    if isLocalRepeated date.clone() then 'red' else ''
 
 
 $.valHooks['xdatetime'] =
@@ -221,7 +232,8 @@ $.valHooks['xdatetime'] =
     name = $(el).attr('name')
     path_ = path(formid, name)
     data.remove({path: path_})
-    value = moment.utc(value).startOf('minute')
+    #value = moment.utc(value).startOf('minute')
+    value = moment(value).startOf('minute')
     data.insert({path: path_, value:value})
 
 $.fn.xdatetime = (name)->
