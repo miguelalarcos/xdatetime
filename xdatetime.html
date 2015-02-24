@@ -6,31 +6,27 @@
         </div>
         {{#if show_calendar}}
             <div class="xdatetime-popover">
-                <div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <i class="minus icon minus-month"></i>
-                    {{month}}
-                    <i class="plus icon plus-month"></i>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <i class="minus icon minus-year"></i>
-                    {{year}}
-                    <i class="plus icon plus-year"></i>
-                </div>
-                {{#each week}}
-                <div>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    {{#each day this ..}}
-                    <span class="xdatetime-day {{decoration}}" date={{this.date}}>{{this.value}}&nbsp;&nbsp;</span>
-                    {{/each}}
+              <div class="xdatetime-header">
+                <i class="minus icon minus-month"></i>
+                {{month}}
+                <i class="plus icon plus-month"></i>
+                <i class="minus icon minus-year"></i>
+                {{year}}
+                <i class="plus icon plus-year"></i>
+              </div>
+              {{#each week}}
+                <div class="xdatetime-week">
+                  {{#each day this ..}}
+                    <span class="xdatetime-day {{decoration}}" date={{this.date}}>{{this.value}}</span>
+                  {{/each}}
                 </div>
                 {{/each}}
             {{#if show_time}}
                 <div class="ui input form">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="inline field">
                         <i class="minus icon minus-hour"></i>
                         <i class="plus icon plus-hour"></i>
-                        <span class="{{checkDST}}">&nbsp;&nbsp;{{time}}&nbsp;&nbsp;</span>
+                        <span class="{{checkDST}}">{{time}}</span>
                         <i class="minus icon minus-minute"></i>
                         <i class="plus icon plus-minute"></i>
                     </span>
