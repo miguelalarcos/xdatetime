@@ -26,3 +26,8 @@ The widget is DST aware. If you navigate to a date-time which is a repetition (e
 
 In the examples folder you have a working example and a battery of tests with ```Jasmine```.
 
+Contributors
+------------
+
+* @amazingBastard
+
