@@ -18,3 +18,15 @@ Package.onUse(function(api) {
   api.addFiles('xdatetime.coffee', 'client');
   api.addFiles('xdatetime.css', 'client');
 });
+
+Package.onTest(function(api) {
+    api.use('tinytest');
+    api.use('miguelalarcos:xdatetime');
+    api.use('coffeescript');
+    api.use('momentjs:moment@2.8.4', 'client');
+    //api.use('mongo', ['client', 'server']);
+    //api.use('underscore', 'client');
+    api.use('practicalmeteor:munit', ['client', 'server']);
+    api.addFiles('test-basic.html', 'client');
+    api.addFiles('test-basic.coffee', 'client');
+});
