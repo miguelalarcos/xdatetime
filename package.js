@@ -24,9 +24,8 @@ Package.onTest(function(api) {
     api.use('miguelalarcos:xdatetime');
     api.use('coffeescript');
     api.use('momentjs:moment@2.8.4', 'client');
-    //api.use('mongo', ['client', 'server']);
-    //api.use('underscore', 'client');
-    api.use('practicalmeteor:munit', ['client', 'server']);
+    api.use('templating', 'client');
+    api.use('practicalmeteor:munit', 'client');
     api.addFiles('test-basic.html', 'client');
     api.addFiles('test-basic.coffee', 'client');
 });

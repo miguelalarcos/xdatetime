@@ -21,18 +21,14 @@ Template.xdatetime.events
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
     txtdate = $(t.find('.xdatetime-input')).val()
-    date = moment(txtdate, atts.format, true).utc()
+    date = moment(txtdate, atts.format, true) #.utc()
     if not date.isValid()
       if atts.time
-        #date = moment.utc()
         date = moment()
       else
-        #date = moment.utc().startOf('day')
         date = moment().startOf('day')
-      #$(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
       $(t.find('.xdatetime-input')).val(date.format(atts.format))
     if date.isSame(data.findOne(path: path_).value.startOf('day'))
-      #$(t.find('.xdatetime-input')).val(date.clone().local().format(atts.format))
       $(t.find('.xdatetime-input')).val(date.format(atts.format))
 
     data.update({path: path_}, {$set: {value: date}})
@@ -51,7 +47,6 @@ Template.xdatetime.events
       date = this.date + ' ' + value
     else
       date = this.date
-    #m_ = moment(date, 'YYYY-MM-DD HH:mm').utc()
     m_ = moment(date, 'YYYY-MM-DD HH:mm')
     data.update({path: path_}, {$set: {value: m_}})
     unless atts.time == true
@@ -116,7 +111,6 @@ Template.xdatetime.events
 
 dayRow = (week, date)->
   ret = []
-  #day = date.clone().local()
   day = date.clone()
   ini_month = day.clone().startOf('Month')
   ini = day.clone().startOf('Month').add(1-ini_month.isoWeekday(), 'days')
@@ -152,17 +146,13 @@ Template.xdatetime.helpers
     value = this.value or obj[atts.name]
     if value is undefined or value is null
       if atts.time == true
-        #value = moment.utc().startOf('minute')
         value = moment().startOf('minute')
       else
-        #value = moment.utc().startOf('day')
         value = moment().startOf('day')
     else
       if atts.time == true
-        #value = moment.utc(value).startOf('minute')
         value = moment(value).startOf('minute')
       else
-        #value = moment.utc(value).startOf('day')
         value = moment(value).startOf('day')
     data.insert({path:path_, value:value})
     null
@@ -171,7 +161,6 @@ Template.xdatetime.helpers
     atts = this.atts or this
     item = data.findOne(path: path(atts.formid, atts.name))
     if item
-      #item.value.local().format(atts.format)
       item.value.format(atts.format)
     else
       null
@@ -188,21 +177,18 @@ Template.xdatetime.helpers
     atts = this.atts or this
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
-    #date.clone().local().format('HH:mm')
     date.format('HH:mm')
 
   year: ->
     atts = this.atts or this
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
-    #date.clone().local().format('YYYY')
     date.format('YYYY')
 
   month: ->
     atts = this.atts or this
     path_ = path(atts.formid, atts.name)
     date = data.findOne(path: path_).value
-    #date.clone().local().format('MM')
     date.format('MM')
 
   week: -> (i for i in [0...6])
@@ -232,7 +218,6 @@ $.valHooks['xdatetime'] =
     name = $(el).attr('name')
     path_ = path(formid, name)
     data.remove({path: path_})
-    #value = moment.utc(value).startOf('minute')
     value = moment(value).startOf('minute')
     data.insert({path: path_, value:value})
 
