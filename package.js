@@ -1,7 +1,7 @@
 Package.describe({
   name: 'miguelalarcos:xdatetime',
   summary: 'datetime widget',
-  version: '0.3.4',
+  version: '0.3.5',
   git: 'https://github.com/miguelalarcos/xdatetime.git'
 });
 
