@@ -21,7 +21,7 @@ Template.xdatetime.events
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
     txtdate = $(t.find('.xdatetime-input')).val()
-    date = moment(txtdate, atts.format, true) #.utc()
+    date = moment(txtdate, atts.format, true)
     if not date.isValid()
       if atts.time
         date = moment()
@@ -42,7 +42,6 @@ Template.xdatetime.events
     atts = t.data.atts or t.data
     path_ = path(atts.formid, atts.name)
     if atts.time == true
-      #value = data.findOne(path: path_).value.clone().local().format('HH:mm')
       value = data.findOne(path: path_).value.format('HH:mm')
       date = this.date + ' ' + value
     else

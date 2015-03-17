@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/miguelalarcos/xdatetime.svg)](https://travis-ci.org/miguelalarcos/xdatetime)
+
 xdatetime
 =========
 
